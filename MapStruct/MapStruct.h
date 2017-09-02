@@ -5,13 +5,15 @@ typedef struct _MapStruct MapStruct;
 extern "C" {
 #endif
 	struct _MapStruct {
-		unsigned char **map;
+		int **map;
 		int row, col;
 		void(*Init)(const char * fileName, MapStruct *this_);
 		void(*ShowMap)(const MapStruct* this_);
 		void(*ShowMapPretty)(const MapStruct* this_);
 		void(*Destroy)(MapStruct * this_);
 		//row, col, map**를 이용해 파일을 생성하는 함수 작성
+
+		int **PathMap;
 	};
 
 void _ShowMap(const MapStruct* this_);
