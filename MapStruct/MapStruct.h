@@ -1,22 +1,24 @@
 #pragma once
 typedef struct _MapStruct MapStruct;
 
-struct _MapStruct {
-	unsigned char **map;
-	int row, col;
-	void(*Init)(const char * fileName, MapStruct *this);
-	void(*ShowMap)(const MapStruct* this);
-	void(*ShowMapPretty)(const MapStruct* this);
-	void(*Destroy)(MapStruct * this);
+#ifdef __cplusplus
+extern "C" {
+#endif
+	struct _MapStruct {
+		unsigned char **map;
+		int row, col;
+		void(*Init)(const char * fileName, MapStruct *this_);
+		void(*ShowMap)(const MapStruct* this_);
+		void(*ShowMapPretty)(const MapStruct* this_);
+		void(*Destroy)(MapStruct * this_);
+		//row, col, map**를 이용해 파일을 생성하는 함수 작성
+	};
 
-};
+void _ShowMap(const MapStruct* this_);
+void _ShowMapPretty(const MapStruct* this_);
+void _Init(const char * filename, MapStruct *this_);
+void _Destroy(MapStruct *this_);
 
-
-
-
-
-
-void _ShowMap(const MapStruct* this);
-void _ShowMapPretty(const MapStruct* this);
-void _Init(const char * filename, MapStruct *this);
-void _Destroy(MapStruct *this);
+#ifdef __cplusplus
+}//extern C
+#endif
