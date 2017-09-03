@@ -7,6 +7,7 @@ extern "C" {
 	struct _MapStruct {
 		int **map;
 		int row, col;
+		int StartX, StartY;
 		void(*Init)(const char * fileName, MapStruct *this_);
 		void(*ShowMap)(const MapStruct* this_);
 		void(*ShowMapPretty)(const MapStruct* this_);
