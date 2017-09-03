@@ -90,6 +90,8 @@ void _Destroy(MapStruct *this_) {
 	this_->map = NULL;
 	this_->col = 0;
 	this_->row = 0;
+	this_->StartX = 0;
+	this_->StartY = 0;
 }
 
 void _ShowMapPretty(const MapStruct* this_) {
