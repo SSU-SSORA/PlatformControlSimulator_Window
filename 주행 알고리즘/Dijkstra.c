@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <windows.h>
 #include "MapStruct.h"
 #include "Dijkstra.h"
 
@@ -28,6 +29,14 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 	for (i = 0; i < VisitSize + (VisitValA * 8); ++i) {
 		CompareSize[i] = this_->row * this_->col * 10 * 10000;
 	}
+
+	system("cls");
+	for (i = 0; i < this_->col; ++i) {
+		for (j = 0; j < this_->row; ++j) {
+			printf("%d\t", this__->VisitMap[i][j]);
+		}printf("\n");
+	}printf("\n");
+	//Sleep(150);
 
 	this__->VisitMap[CurrentY][CurrentX] = 2;
 	for (i = -1; i <= 1; ++i) {
@@ -155,6 +164,14 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 					}
 
 					this__->VisitMap[VisitY][VisitX] = 2;
+
+					system("cls");
+					for (i = 0; i < this_->col; ++i) {
+						for (j = 0; j < this_->row; ++j) {
+							printf("%d\t", this__->VisitMap[i][j]);
+						}printf("\n");
+					}printf("\n");
+					//Sleep(150);
 				}
 			}
 		}
@@ -245,6 +262,14 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 					}
 
 					this__->VisitMap[VisitY][VisitX] = 2;
+
+					system("cls");
+					for (i = 0; i < this_->col; ++i) {
+						for (j = 0; j < this_->row; ++j) {
+							printf("%d\t", this__->VisitMap[i][j]);
+						}printf("\n");
+					}printf("\n");
+					//Sleep(150);
 				}
 			}
 		}
@@ -359,6 +384,8 @@ void DrawPathMap(const MapStruct* this_, const DijkstraStruct* this__, int Visit
 
 
 }
+
+
 
 void Destroy(MapStruct* this_,DijkstraStruct* this__) {
 	
