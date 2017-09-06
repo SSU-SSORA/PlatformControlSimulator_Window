@@ -1,3 +1,5 @@
+#pragma warning(disable : 4996)
+
 #include <stdio.h>
 #include <malloc.h>
 #include <windows.h>
@@ -12,9 +14,9 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 	int CurrentX = StartX, CurrentY = StartY;
 	int VisitX = CurrentX, VisitY = CurrentY;
 	int FinishX, FinishY;
-	int i = 0, j = 0, m = 0, roop = 0; // for문용 변수
+	int i = 0, j = 0, m = 0, roop = 0, V = 0; // for문용 변수
 
-	Init(this_, this__);
+	Dijstra_Init(this_, this__);
 
 	int VisitValA = 0;
 	int VisitValB = 1;
@@ -30,15 +32,18 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 		CompareSize[i] = this_->row * this_->col * 10 * 10000;
 	}
 
-	system("cls");
+	/*system("cls");
 	for (i = 0; i < this_->col; ++i) {
 		for (j = 0; j < this_->row; ++j) {
 			printf("%d\t", this__->VisitMap[i][j]);
 		}printf("\n");
 	}printf("\n");
-	//Sleep(150);
+	scanf("%*d");*///Sleep(150);
 
 	this__->VisitMap[CurrentY][CurrentX] = 2;
+	this_->VisitX[V] = CurrentX;
+	this_->VisitY[V] = CurrentY;
+	++V;
 	for (i = -1; i <= 1; ++i) {
 		for (j = -1; j <= 1; ++j) {
 			if(CurrentX + j < 0 || CurrentX + j >= this_->row || CurrentY + i < 0 || CurrentY + j >= this_->col) {}
@@ -164,17 +169,23 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 					}
 
 					this__->VisitMap[VisitY][VisitX] = 2;
-
-					system("cls");
+					this_->VisitX[V] = VisitX;
+					this_->VisitY[V] = VisitY;
+					++V;
+					/*system("cls");
 					for (i = 0; i < this_->col; ++i) {
 						for (j = 0; j < this_->row; ++j) {
 							printf("%d\t", this__->VisitMap[i][j]);
 						}printf("\n");
 					}printf("\n");
-					//Sleep(150);
+					scanf("%*d");*///Sleep(150);
 				}
 			}
 		}
+		this__->VisitMap[VisitY][VisitX] = 2;
+		this_->VisitX[V] = VisitX;
+		this_->VisitY[V] = VisitY;
+		++V;
 		//printf("roop : %d\n\n", roop);//////////////////////////////////Debug
 		roop = 0;
 
@@ -262,17 +273,23 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 					}
 
 					this__->VisitMap[VisitY][VisitX] = 2;
-
-					system("cls");
+					this_->VisitX[V] = VisitX;
+					this_->VisitY[V] = VisitY;
+					++V;
+					/*system("cls");
 					for (i = 0; i < this_->col; ++i) {
 						for (j = 0; j < this_->row; ++j) {
 							printf("%d\t", this__->VisitMap[i][j]);
 						}printf("\n");
 					}printf("\n");
-					//Sleep(150);
+					scanf("%*d");*///Sleep(150);
 				}
 			}
-		}
+		}					
+		this__->VisitMap[VisitY][VisitX] = 2;
+		this_->VisitX[V] = VisitX;
+		this_->VisitY[V] = VisitY;
+		++V;
 		free(Size);
 
 		//printf(" roop : %d\n\n", roop); //////////Debug
@@ -296,9 +313,12 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 }
 
-void Init(MapStruct* this_, DijkstraStruct* this__) {
+void Dijstra_Init(MapStruct* this_, DijkstraStruct* this__) {
 	int i, j;
 	
+	this__->DrawPathMap = DrawPathMap;
+	this__->Dijkstra = Dijkstra;
+
 	this__->MapWeight = (int**)malloc(sizeof(int*) * this_->col);
 	for (i = 0; i < this_->col; ++i) {
 		this__->MapWeight[i] = (int*)malloc(sizeof(int) * this_->row);

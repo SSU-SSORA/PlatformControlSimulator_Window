@@ -9,14 +9,12 @@ extern "C" {
 	struct _DijkstraStruct {
 		int **MapWeight;
 		char **VisitMap;
-		void (*Dijkstra)(MapStruct *this_, DijkstraStruct *this__);
-		void(*Init)(MapStruct* this_, DijkstraStruct* this__);
+		void(*Dijkstra)(MapStruct *this_, DijkstraStruct *this__);
 		void(*DrawPathMap)(const MapStruct* this_,const DijkstraStruct* this__, int VisitX, int VisitY);
-		void (*Destroy)(MapStruct* this_, DijkstraStruct* this__);
 
 	};
 	void Dijkstra(MapStruct *this_, DijkstraStruct *this__);
-	void Init(MapStruct* this_, DijkstraStruct* this__);
+	void Dijstra_Init(MapStruct* this_, DijkstraStruct* this__);
 	void DrawPathMap(const MapStruct* this_,const DijkstraStruct* this__, int VisitX, int VisitY);
 	void Destroy(MapStruct* this_, DijkstraStruct* this__);
 

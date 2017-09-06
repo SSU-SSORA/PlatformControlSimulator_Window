@@ -60,11 +60,19 @@ void _Init(const char * filename, MapStruct *this_) {
 	
 	while (fgetc(in)!= EOF) {
 		fscanf(in,"%d %d %d", &i, &j, &data);
-		this_->map[i][j] = data;//unsigned char = int, -1 == 255�� ġȯ��
+		this_->map[i][j] = data;
 		this_->PathMap[i][j] = data; 
 		if (this_->map[i][j] == 's') { this_->StartX = j; this_->StartY = i; }
 	}
 
+
+	this_->VisitX = (int*)malloc(sizeof(int) * (row * col));
+	this_->VisitY = (int*)malloc(sizeof(int) * (row * col));
+
+	for (i = 0; i < row*col; ++i) {
+		this_->VisitX[i] = this_->StartX;
+		this_->VisitY[i] = this_->StartY;
+	}
 
 
 
@@ -73,11 +81,13 @@ void _Init(const char * filename, MapStruct *this_) {
 	this_->ShowPathMap = _ShowPathMap;
 	this_->Destroy = _Destroy;
 	this_->ShowMapPretty = _ShowMapPretty;
+	this_->ShowVisitXY = _ShowVisitXY;
 	this_->row = row;
 	this_->col = col;
 }
 
 void _Destroy(MapStruct *this_) {
+
 	for (int i = 0; i < this_->row; ++i)
 		free(this_->map[i]);
 	free(this_->map);
@@ -86,12 +96,18 @@ void _Destroy(MapStruct *this_) {
 		free(this_->PathMap[i]);
 	free(this_->PathMap);
 
+	free(this_->VisitY);
+	free(this_->VisitX);
+	
+
 	this_->PathMap = NULL;
 	this_->map = NULL;
 	this_->col = 0;
 	this_->row = 0;
 	this_->StartX = 0;
 	this_->StartY = 0;
+	this_->VisitX = 0;
+	this_->VisitY = 0;
 }
 
 void _ShowMapPretty(const MapStruct* this_) {
@@ -105,5 +121,11 @@ void _ShowMapPretty(const MapStruct* this_) {
 				printf("%3s", "��");
 		}
 		printf("\n");
+	}
+}
+
+void _ShowVisitXY(const MapStruct* this_) {
+	for (int i = 0; i < this_->col * this_->row; ++i) {
+		printf("X[%d] : %d\t Y[%d] : %d\n", i, this_->VisitX[i], i, this_->VisitY[i]);
 	}
 }
