@@ -1,5 +1,8 @@
+#pragma warning(disable : 4996)
+
 #include <stdio.h>
 #include <malloc.h>
+#include <windows.h>
 #include "MapStruct.h"
 #include "Dijkstra.h"
 
@@ -11,36 +14,9 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 	int CurrentX = StartX, CurrentY = StartY;
 	int VisitX = CurrentX, VisitY = CurrentY;
 	int FinishX, FinishY;
-	int i = 0, j = 0, m = 0, n = 0, roop = 0; // for문용 변수
+	int i = 0, j = 0, m = 0, roop = 0, V = 0; // for문용 변수
 
-
-	this__->MapWeight = (int**)malloc(sizeof(int*) * this_->col);
-	for (i = 0; i < this_->col; ++i) {
-		this__->MapWeight[i] = (int*)malloc(sizeof(int) * this_->row);
-
-	}
-
-
-
-	for (i = 0; i < this_->col; ++i) {
-		for (j = 0; j < this_->row; ++j) {
-			this__->MapWeight[i][j] = this_->row * this_->col * 10; // 일반적으로 아직 방문하지않은 곳의 가중치를 무한대로 설정하나, 무한대표현이 어렵기에 가중치 최대값+1으로 초기화
-		}
-	}
-	this__->MapWeight[StartY][StartX] = 0; // this__->MapWeight 초기화
-
-	this__->VisitMap=(char**)malloc(sizeof(char*) * this_->col); // 0은 방문 전,1은 방문 대기, 2은 방문 후
-	for (i = 0; i < this_->col; ++i) {
-		this__->VisitMap[i] = (char*)malloc(sizeof(char) * this_->row);
-	}
-
-
-	for (i = 0; i < this_->col; ++i) {
-		for (j = 0; j < this_->row; ++j) {
-			this__->VisitMap[i][j] = 0;
-		}
-	} // this__->VisitMap 초기화
-
+	Dijstra_Init(this_, this__);
 
 	int VisitValA = 0;
 	int VisitValB = 1;
@@ -53,35 +29,50 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 																				//00000(가중치)00(x좌표)00(y좌표)
 
 	for (i = 0; i < VisitSize + (VisitValA * 8); ++i) {
-		CompareSize[i] = 0;
+		CompareSize[i] = this_->row * this_->col * 10 * 10000;
 	}
 
+	/*system("cls");
+	for (i = 0; i < this_->col; ++i) {
+		for (j = 0; j < this_->row; ++j) {
+			printf("%d\t", this__->VisitMap[i][j]);
+		}printf("\n");
+	}printf("\n");
+	scanf("%*d");*///Sleep(150);
+
 	this__->VisitMap[CurrentY][CurrentX] = 2;
+	this_->VisitX[V] = CurrentX;
+	this_->VisitY[V] = CurrentY;
+	++V;
 	for (i = -1; i <= 1; ++i) {
 		for (j = -1; j <= 1; ++j) {
+			if(CurrentX + j < 0 || CurrentX + j >= this_->row || CurrentY + i < 0 || CurrentY + j >= this_->col) {}
+			else {
+				if (this_->map[CurrentY + i][CurrentX + j] < 0) {}
 
-			if (this_->map[CurrentY + i][CurrentX + j] < 0) {}
+				else if (i*i + j*j == 2) {
 
-			else if (i*i + j*j == 2) {
+					if (this__->MapWeight[CurrentY + i][CurrentX + j] == this_->row * this_->col * 10) {
+						this__->MapWeight[CurrentY + i][CurrentX + j] = 14;
+					}
+					else this__->MapWeight[CurrentY + i][CurrentX + j] += 14;
 
-				if (this__->MapWeight[CurrentY + i][CurrentX + j] == this_->row * this_->col * 10) {
-					this__->MapWeight[CurrentY + i][CurrentX + j] = 14;
 				}
-				else this__->MapWeight[CurrentY + i][CurrentX + j] += 14;
 
-			}
+				else if (i*i + j*j == 1) {
 
-			else if (i*i + j*j == 1) {
-
-				if (this__->MapWeight[CurrentY + i][CurrentX + j] == this_->row * this_->col * 10) {
-					this__->MapWeight[CurrentY + i][CurrentX + j] = 10;
+					if (this__->MapWeight[CurrentY + i][CurrentX + j] == this_->row * this_->col * 10) {
+						this__->MapWeight[CurrentY + i][CurrentX + j] = 10;
+					}
+					else this__->MapWeight[CurrentY + i][CurrentX + j] += 10;
 				}
-				else this__->MapWeight[CurrentY + i][CurrentX + j] += 10;
-			}
-			if (this__->VisitMap[CurrentY + i][CurrentX + j] != 2) {
-				this__->VisitMap[CurrentY + i][CurrentX + j] = 1;
-				CompareSize[roop] = this__->MapWeight[CurrentY + i][CurrentX + j] * 10000 + (CurrentX + j) * 100 + (CurrentY + i);
-				++roop;
+
+
+				if (this__->VisitMap[CurrentY + i][CurrentX + j] < 1) {
+					this__->VisitMap[CurrentY + i][CurrentX + j] = 1;
+					CompareSize[roop] = this__->MapWeight[CurrentY + i][CurrentX + j] * 10000 + (CurrentX + j) * 100 + (CurrentY + i);
+					++roop;
+				}
 			}
 		}
 
@@ -90,7 +81,6 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 	//printf("roop %d\n\n", roop);/////////////Debug
 	roop = 0;
-	
 
 
 
@@ -179,9 +169,23 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 					}
 
 					this__->VisitMap[VisitY][VisitX] = 2;
+					this_->VisitX[V] = VisitX;
+					this_->VisitY[V] = VisitY;
+					++V;
+					/*system("cls");
+					for (i = 0; i < this_->col; ++i) {
+						for (j = 0; j < this_->row; ++j) {
+							printf("%d\t", this__->VisitMap[i][j]);
+						}printf("\n");
+					}printf("\n");
+					scanf("%*d");*///Sleep(150);
 				}
 			}
 		}
+		this__->VisitMap[VisitY][VisitX] = 2;
+		this_->VisitX[V] = VisitX;
+		this_->VisitY[V] = VisitY;
+		++V;
 		//printf("roop : %d\n\n", roop);//////////////////////////////////Debug
 		roop = 0;
 
@@ -269,9 +273,23 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 					}
 
 					this__->VisitMap[VisitY][VisitX] = 2;
+					this_->VisitX[V] = VisitX;
+					this_->VisitY[V] = VisitY;
+					++V;
+					/*system("cls");
+					for (i = 0; i < this_->col; ++i) {
+						for (j = 0; j < this_->row; ++j) {
+							printf("%d\t", this__->VisitMap[i][j]);
+						}printf("\n");
+					}printf("\n");
+					scanf("%*d");*///Sleep(150);
 				}
 			}
-		}
+		}					
+		this__->VisitMap[VisitY][VisitX] = 2;
+		this_->VisitX[V] = VisitX;
+		this_->VisitY[V] = VisitY;
+		++V;
 		free(Size);
 
 		//printf(" roop : %d\n\n", roop); //////////Debug
@@ -280,18 +298,6 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 		if (this_->map[VisitY][VisitX] == 102) break; // 102 = 'f'
 
 		VisitValB += 2;
-
-		/*for (i = 0; i < this_->col; ++i) {
-			for (j = 0; j < this_->row; ++j) {
-
-				printf("%d\t", this__->MapWeight[i][j]);
-
-			}
-			printf("\n");
-		}printf("\n"); *////////////////////////////////////Debug
-
-
-
 
 
 	}
@@ -303,20 +309,42 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 	
 	DrawPathMap(this_,this__ , FinishX, FinishY);
 
-	for (i = 0; i < this_->row; ++i) {
-		free(this__->MapWeight[i]);
-		free(this__->VisitMap[i]);
+	Destroy(this_, this__);
+
+}
+
+void Dijstra_Init(MapStruct* this_, DijkstraStruct* this__) {
+	int i, j;
+	
+	this__->DrawPathMap = DrawPathMap;
+	this__->Dijkstra = Dijkstra;
+
+	this__->MapWeight = (int**)malloc(sizeof(int*) * this_->col);
+	for (i = 0; i < this_->col; ++i) {
+		this__->MapWeight[i] = (int*)malloc(sizeof(int) * this_->row);
+
 	}
-	
-
-	free(this__->MapWeight);
-	free(this__->VisitMap);
-
-
-	
 
 
 
+	for (i = 0; i < this_->col; ++i) {
+		for (j = 0; j < this_->row; ++j) {
+			this__->MapWeight[i][j] = this_->row * this_->col * 10; // 일반적으로 아직 방문하지않은 곳의 가중치를 무한대로 설정하나, 무한대표현이 어렵기에 가중치 최대값+1으로 초기화
+		}
+	}
+	this__->MapWeight[this_->StartY][this_->StartX] = 0; // this__->MapWeight 초기화
+
+	this__->VisitMap = (char**)malloc(sizeof(char*) * this_->col); // 0은 방문 전,1은 방문 대기, 2은 방문 후
+	for (i = 0; i < this_->col; ++i) {
+		this__->VisitMap[i] = (char*)malloc(sizeof(char) * this_->row);
+	}
+
+
+	for (i = 0; i < this_->col; ++i) {
+		for (j = 0; j < this_->row; ++j) {
+			this__->VisitMap[i][j] = 0;
+		}
+	} // this__->VisitMap 초기화
 
 }
 
@@ -362,6 +390,7 @@ void DrawPathMap(const MapStruct* this_, const DijkstraStruct* this__, int Visit
 
 
 	}
+	this_->PathMap[VisitY][VisitX] = 's';
 	free(CompareSize);
 
 	/*for (i = 0; i < this_->col; ++i) {
@@ -373,6 +402,23 @@ void DrawPathMap(const MapStruct* this_, const DijkstraStruct* this__, int Visit
 	printf("\n");
 	}printf("\n"); */////////////////////////////////////Debug
 
+
+}
+
+
+
+void Destroy(MapStruct* this_,DijkstraStruct* this__) {
+	
+	for (int i = 0; i < this_->row; ++i) {
+		free(this__->MapWeight[i]);
+		free(this__->VisitMap[i]);
+	}
+
+	free(this__->MapWeight);
+	free(this__->VisitMap);
+
+	this__->MapWeight = NULL;
+	this__->VisitMap = NULL;
 
 }
 
