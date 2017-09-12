@@ -31,11 +31,11 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 	for (i = 0; i < VisitSize + (VisitValA * 8); ++i) {
 		CompareSize[i] = this_->row * this_->col * 10 * 10000;
 	}
-
-	/*system("cls");
+	/*
+	//system("cls");
 	for (i = 0; i < this_->col; ++i) {
 		for (j = 0; j < this_->row; ++j) {
-			printf("%d\t", this__->VisitMap[i][j]);
+			printf("%d\t", this__->MapWeight[i][j]);
 		}printf("\n");
 	}printf("\n");
 	scanf("%*d");*///Sleep(150);
@@ -104,7 +104,7 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 			printf("%d\t", CompareSize[i]);
 
-		}printf("\n\n");*//////////////////Debug
+		}printf("\n\n");*/////////////////Debug
 
 						//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -147,7 +147,6 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 								}
 
 								else if (i*i + j*j == 1) {
-
 									if (this__->MapWeight[VisitY + i][VisitX + j] == this_->row * this_->col * 10) {
 										this__->MapWeight[VisitY + i][VisitX + j] = this__->MapWeight[VisitY][VisitX] + 10;
 									}
@@ -167,31 +166,35 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 						}
 
 					}
-
+					
 					this__->VisitMap[VisitY][VisitX] = 2;
 					this_->VisitX[V] = VisitX;
 					this_->VisitY[V] = VisitY;
 					++V;
-					/*system("cls");
-					for (i = 0; i < this_->col; ++i) {
+					
+					//system("cls");
+					/*for (i = 0; i < this_->col; ++i) {
 						for (j = 0; j < this_->row; ++j) {
-							printf("%d\t", this__->VisitMap[i][j]);
+							printf("%d\t", this__->MapWeight[i][j]);
 						}printf("\n");
 					}printf("\n");
-					scanf("%*d");*///Sleep(150);
+					scanf("%*d");Sleep(150);*/
 				}
 			}
 		}
-		this__->VisitMap[VisitY][VisitX] = 2;
-		this_->VisitX[V] = VisitX;
-		this_->VisitY[V] = VisitY;
-		++V;
+		
+
 		//printf("roop : %d\n\n", roop);//////////////////////////////////Debug
 		roop = 0;
 
 		free(CompareSize);
-		if (this_->map[VisitY][VisitX] == 102) break; //102 = 'f'
-
+		if (this_->map[VisitY][VisitX] == 102) {
+			this__->VisitMap[VisitY][VisitX] = 2;
+			this_->VisitX[V] = VisitX;
+			this_->VisitY[V] = VisitY;
+			++V;
+			break; //102 = 'f'
+		}
 		/////////////////////////////////////////////////////////////////////////////////////////////////
 		for (i = 0; i < VisitSize + VisitValB * 8; ++i) {
 			for (j = i + 1; j < VisitSize + VisitValB * 8; j++) {
@@ -286,22 +289,24 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 				}
 			}
 		}					
-		this__->VisitMap[VisitY][VisitX] = 2;
-		this_->VisitX[V] = VisitX;
-		this_->VisitY[V] = VisitY;
-		++V;
+
 		free(Size);
 
 		//printf(" roop : %d\n\n", roop); //////////Debug
 
 		roop = 0;
-		if (this_->map[VisitY][VisitX] == 102) break; // 102 = 'f'
-
+		if (this_->map[VisitY][VisitX] == 102) {
+			this__->VisitMap[VisitY][VisitX] = 2;
+			this_->VisitX[V] = VisitX;
+			this_->VisitY[V] = VisitY;
+			++V;
+			break; // 102 = 'f'
+		}
 		VisitValB += 2;
 
 
 	}
-
+	
 	roop = 0;
 	
 	
@@ -411,11 +416,11 @@ void Destroy(MapStruct* this_,DijkstraStruct* this__) {
 	
 	for (int i = 0; i < this_->row; ++i) {
 		free(this__->MapWeight[i]);
-		free(this__->VisitMap[i]);
+		free(this__->VisitMap[i]);/////////.
 	}
-
-	free(this__->MapWeight);
+	
 	free(this__->VisitMap);
+	free(this__->MapWeight);
 
 	this__->MapWeight = NULL;
 	this__->VisitMap = NULL;
