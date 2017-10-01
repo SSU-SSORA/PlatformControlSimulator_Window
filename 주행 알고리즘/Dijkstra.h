@@ -17,9 +17,9 @@ extern "C" {
 		void Dijkstra(MapStruct *this_);
 
 	private:
-		void Dijstra_Init(MapStruct* this_);
+		void Dijkstra_Init(MapStruct* this_);
 		void PathXYData(MapStruct* this_);
-		void Destroy(MapStruct* this_);
+		void Dijkstra_Destroy(MapStruct* this_);
 		void VisitXYData(const MapStruct* this_);
 	};
 

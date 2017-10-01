@@ -14,7 +14,7 @@ void DijkstraStruct::Dijkstra(MapStruct *this_)
 	int VisitX = StartX, VisitY = StartY;
 	int i = 0, j = 0, m = 0, loop = 0, V = 0; // for문용 변수
 
-	Dijstra_Init(this_);
+	Dijkstra_Init(this_);
 
 	int VisitValA = 0;
 	int VisitValB = 1;
@@ -257,10 +257,10 @@ void DijkstraStruct::Dijkstra(MapStruct *this_)
 	loop = 0;
 	this->VisitXYData(this_);
 	this->PathXYData(this_);
-	this->Destroy(this_);
+	this->Dijkstra_Destroy(this_);
 }
 
-void DijkstraStruct::Dijstra_Init(MapStruct* this_) {
+void DijkstraStruct::Dijkstra_Init(MapStruct* this_) {
 	int i, j;
 	
 
@@ -341,7 +341,7 @@ void DijkstraStruct::PathXYData (MapStruct* this_) {
 
 }
 
-void DijkstraStruct::Destroy(MapStruct* this_) {
+void DijkstraStruct::Dijkstra_Destroy(MapStruct* this_) {
 	
 	for (int i = 0; i < this_->row; ++i) {
 		free(MapWeight[i]);
