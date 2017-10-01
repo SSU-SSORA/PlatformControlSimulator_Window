@@ -14,7 +14,7 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 	int CurrentX = StartX, CurrentY = StartY;
 	int VisitX = CurrentX, VisitY = CurrentY;
 	int FinishX, FinishY;
-	int i = 0, j = 0, m = 0, roop = 0, V = 0; // for문용 변수
+	int i = 0, j = 0, m = 0, loop = 0, V = 0; // for문용 변수
 
 	Dijstra_Init(this_, this__);
 
@@ -25,7 +25,7 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 
 
-	int *CompareSize = (int*)malloc(sizeof(int) * VisitSize + (VisitValA * 8)); // 현재좌표 주변에 가중치가 가장낮은 좌표부터 방문해야하기에 가중치비교후 좌표저장
+	int *CompareSize = (int*)malloc(sizeof(int) * (VisitSize + VisitValA * 8)); // 현재좌표 주변에 가중치가 가장낮은 좌표부터 방문해야하기에 가중치비교후 좌표저장
 																				//00000(가중치)00(x좌표)00(y좌표)
 
 	for (i = 0; i < VisitSize + (VisitValA * 8); ++i) {
@@ -70,8 +70,8 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 				if (this__->VisitMap[CurrentY + i][CurrentX + j] < 1) {
 					this__->VisitMap[CurrentY + i][CurrentX + j] = 1;
-					CompareSize[roop] = this__->MapWeight[CurrentY + i][CurrentX + j] * 10000 + (CurrentX + j) * 100 + (CurrentY + i);
-					++roop;
+					CompareSize[loop] = this__->MapWeight[CurrentY + i][CurrentX + j] * 10000 + (CurrentX + j) * 100 + (CurrentY + i);
+					++loop;
 				}
 			}
 		}
@@ -79,8 +79,8 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 	}
 
-	//printf("roop %d\n\n", roop);/////////////Debug
-	roop = 0;
+	//printf("loop %d\n\n", loop);/////////////Debug
+	loop = 0;
 
 
 
@@ -158,8 +158,8 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 								if (this__->VisitMap[VisitY + i][VisitX + j] < 1) {
 									this__->VisitMap[VisitY + i][VisitX + j] = 1;
-									Size[roop] = this__->MapWeight[VisitY + i][VisitX + j] * 10000 + (VisitX + j) * 100 + (VisitY + i);
-									++roop;
+									Size[loop] = this__->MapWeight[VisitY + i][VisitX + j] * 10000 + (VisitX + j) * 100 + (VisitY + i);
+									++loop;
 								}
 							}
 
@@ -184,8 +184,8 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 		}
 		
 
-		//printf("roop : %d\n\n", roop);//////////////////////////////////Debug
-		roop = 0;
+		//printf("loop : %d\n\n", loop);//////////////////////////////////Debug
+		loop = 0;
 
 		free(CompareSize);
 		if (this_->map[VisitY][VisitX] == 102) {
@@ -231,8 +231,8 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 					for (i = -1; i <= 1; ++i) {
 						for (j = -1; j <= 1; ++j) {
 							if (VisitX + j >= this_->row || VisitY + i >= this_->col || VisitX + j < 0 || VisitY + i < 0) {
-								CompareSize[roop] = this_->row * this_->col * 10 * 10000;
-								++roop;
+								CompareSize[loop] = this_->row * this_->col * 10 * 10000;
+								++loop;
 
 							}
 							else {
@@ -263,11 +263,11 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 								if (this__->VisitMap[VisitY + i][VisitX + j] < 1) {
 									this__->VisitMap[VisitY + i][VisitX + j] = 1;
-									CompareSize[roop] = this__->MapWeight[VisitY + i][VisitX + j] * 10000 + (VisitX + j) * 100 + (VisitY + i);
-									++roop;
+									CompareSize[loop] = this__->MapWeight[VisitY + i][VisitX + j] * 10000 + (VisitX + j) * 100 + (VisitY + i);
+									++loop;
 								}
 								else {
-									CompareSize[roop] = this_->row * this_->col * 10 * 10000;
+									CompareSize[loop] = this_->row * this_->col * 10 * 10000;
 
 								}
 
@@ -292,9 +292,9 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 		free(Size);
 
-		//printf(" roop : %d\n\n", roop); //////////Debug
+		//printf(" loop : %d\n\n", loop); //////////Debug
 
-		roop = 0;
+		loop = 0;
 		if (this_->map[VisitY][VisitX] == 102) {
 			this__->VisitMap[VisitY][VisitX] = 2;
 			this_->VisitX[V] = VisitX;
@@ -307,7 +307,7 @@ void Dijkstra(MapStruct *this_,DijkstraStruct *this__) {
 
 	}
 	
-	roop = 0;
+	loop = 0;
 	
 	
 	FinishX = VisitX; FinishY = VisitY;
@@ -355,7 +355,7 @@ void Dijstra_Init(MapStruct* this_, DijkstraStruct* this__) {
 
 void DrawPathMap(const MapStruct* this_, const DijkstraStruct* this__, int VisitX, int VisitY) {
 	int i, j, tmp;
-	int roop = 0;
+	int loop = 0;
 	int *CompareSize = (int*)malloc(sizeof(int) * 8);
 
 	while (this_->map[VisitY][VisitX] != 115) {
@@ -364,16 +364,16 @@ void DrawPathMap(const MapStruct* this_, const DijkstraStruct* this__, int Visit
 			for (j = -1; j <= 1; ++j) {
 				if (i == 0 && j == 0) {}
 				else if (VisitX + j >= this_->row || VisitX + j < 0 || VisitY + i >= this_->col || VisitY + i < 0) {
-					CompareSize[roop] = this_->row * this_->col * 10 * 10000;
-					++roop;
+					CompareSize[loop] = this_->row * this_->col * 10 * 10000;
+					++loop;
 				}
 				else {
-					CompareSize[roop] = this__->MapWeight[VisitY + i][VisitX + j] * 10000 + (VisitX + j) * 100 + VisitY + i;
-					++roop;
+					CompareSize[loop] = this__->MapWeight[VisitY + i][VisitX + j] * 10000 + (VisitX + j) * 100 + VisitY + i;
+					++loop;
 				}
 			}
 		}
-		roop = 0;
+		loop = 0;
 		
 
 		for (i = 0; i < 8; ++i) {
