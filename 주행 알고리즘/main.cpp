@@ -2,9 +2,10 @@
 #include <string.h>
 #include "MapStruct.h"
 #include "Dijkstra.h"
+#include "Astar.h"
 
 
-void Astar();
+
 
 void BiDirec();
 
@@ -17,23 +18,20 @@ int main() {
 
 	MapStruct mst;
 	DijkstraStruct dst;
+	//AstarStruct ast;
 
-	_Init(FILE_NAME, &mst);//초기화 함수. 반드시 작동시킬 것
-	dst.DrawPathMap = DrawPathMap;
-	dst.Dijkstra = Dijkstra;
+	mst.Init(FILE_NAME);//초기화 함수. 반드시 작동시킬 것
 
+
+	//ast.Astar = Astar;
+	
 	//mst.ShowMap(&mst);//단순히 숫자로 맵을 보여줌
-
-	dst.Dijkstra(&mst, &dst);
-	mst.ShowPathMap(&mst);
-	mst.ShowVisitXY(&mst);
-	//Test(&mst);
+	//ast.Astar(&mst,&ast);
+	//dst.Dijkstra(&mst);
+	//mst.ShowPathMap();
 	//mst.ShowMapPretty(&mst);//1이상의 가중치가 있는 길은 □, -1이하의 높이가 있는 벽은
 							//■로 보여주는 함수
-
-	mst.Destroy(&mst);//메모리해제 및 변수초기화
-
-	//Djikstra();
+	mst.Destroy();//메모리해제 및 변수초기화
 	
 
 }
