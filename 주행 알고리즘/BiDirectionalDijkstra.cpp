@@ -6,26 +6,21 @@
 void BiDirectionalDijkstraStruct::BiDirectional_Dijkstra(MapStruct *this_) {
 	
 	BiDijkstra_Init(this_);
-
 	int CurrentSX = this_->StartX, CurrentSY = this_->StartY;
 	int CurrentFX = this_->FinishX, CurrentFY = this_->FinishY;
 
 	while (1) {
-		
+		if (MeetDiscriminant(this_, &CurrentSX, &CurrentSY, MapWeightF)) break;
 		Searching(this_, &CurrentSX, &CurrentSY,MapWeightS,VisitMapS);
-		if (VisitMapF[CurrentSY][CurrentSX] == 1) {
-			MeetX = CurrentSX; MeetY = CurrentSY;
-			break;
-		}
 
+		if (MeetDiscriminant(this_, &CurrentFX, &CurrentFY, MapWeightS)) break;
 		Searching(this_, &CurrentFX, &CurrentFY, MapWeightF,VisitMapF);
-		if (VisitMapS[CurrentFY][CurrentFX] == 1) {
-			MeetX = CurrentFX; MeetY = CurrentFY;
-			break;
-		}
-		
 	}
 	
+	V += 1;
+	this_->VisitX[V] = MeetX;
+	this_->VisitY[V] = MeetY;
+
 	BiDijkstra_PathXY(this_);
 	BiDijkstra_VisitXY(this_);
 	BiDijkstra_Destroy(this_);
@@ -143,15 +138,16 @@ void BiDirectionalDijkstraStruct::BiDijkstra_VisitXY(MapStruct* this_) {
 	fclose(fp);
 }
 
-void BiDirectionalDijkstraStruct::Searching(MapStruct* this_, int *CurrentX, int *CurrentY, int *MapWeight[13],char *VisitMap[13]) {
+void BiDirectionalDijkstraStruct::Searching(MapStruct* this_, int *CurrentX, int *CurrentY, int **MapWeight,char **VisitMap) {
 
 	int Min = INFINITE;
 	int i, j;
 	int X, Y;
 	VisitMap[*CurrentY][*CurrentX] = 1;
 	this_->VisitX[V] = *CurrentX;
-	this_->VisitX[V] = *CurrentY;
+	this_->VisitY[V] = *CurrentY;
 	V += 1;
+	
 	for (i = -1; i <= 1; ++i) {
 		for (j = -1; j <= 1; ++j) {
 			if (*CurrentX + j < 0 || *CurrentX + j >= this_->row || *CurrentY + i < 0 || *CurrentY + i >= this_->col) {}
@@ -181,4 +177,27 @@ void BiDirectionalDijkstraStruct::Searching(MapStruct* this_, int *CurrentX, int
 		}
 	}
 
+}
+
+int BiDirectionalDijkstraStruct::MeetDiscriminant(MapStruct* this_, int *CurrentX, int *CurrentY, int **MapWeight) {
+	
+	int Min = INFINITE;
+	int escape = 0;
+
+	for (int i = -1; i <= 1; ++i) {
+		for (int j = -1; j <= 1; ++j) {
+			if (*CurrentX + j < 0 || *CurrentX + j >= this_->row || *CurrentY + i < 0 || *CurrentY + i >= this_->col) {}
+			else if (MapWeightS[*CurrentY + i][*CurrentX + j] != INFINITE) {
+				if (Min > MapWeight[*CurrentY + i][*CurrentX + j]) {
+					Min = MapWeight[*CurrentY + i][*CurrentX + j];
+					MeetX = *CurrentX + j; MeetY = *CurrentY + i;
+					this_->VisitX[V] = *CurrentX;
+					this_->VisitY[V] = *CurrentY;
+					escape = 1;
+				}
+			}
+		}
+	}
+	if (escape) return 1;
+	else return 0;
 }

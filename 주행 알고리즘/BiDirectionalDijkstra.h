@@ -21,7 +21,8 @@ extern "C" {
 		void BiDijkstra_Destroy(MapStruct* this_);
 		void BiDijkstra_PathXY(MapStruct* this_);
 		void BiDijkstra_VisitXY(MapStruct* this_);
-		void Searching(MapStruct* this_,int *CurrentX,int *CurrentY, int*MapWeight[13], char *VisitMap[13]);
+		void Searching(MapStruct* this_,int *CurrentX,int *CurrentY, int **MapWeight, char **VisitMap);
+		int MeetDiscriminant(MapStruct* this_, int *CurrentX, int *CurrentY, int **MapWeight);
 	};
 
 
